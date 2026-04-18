@@ -31,10 +31,22 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript
 *.tsbuildinfo
+
+# generated API types
+src/api/types.generated.ts
+
+# test output
+coverage/
+
+# editor
+.idea/
+.vscode/
+.claude/
 
 # generated native folders
 /ios

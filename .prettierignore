@@ -1,0 +1,10 @@
+node_modules
+.expo
+dist
+build
+ios
+android
+coverage
+src/api/types.generated.ts
+*.lock
+package-lock.json
