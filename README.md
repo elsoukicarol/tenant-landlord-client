@@ -6,6 +6,7 @@ single app with role-dispatched shells for tenants, maintainers, and landlords.
 - Backend: `../server` (NestJS, REST at `/api/v1`)
 - Design system: [Figma · Habitare v1.0](https://www.figma.com/design/TZ0ouZT86FcD6Xql3zRnmb/)
 - Plan: [PLAN.md](PLAN.md)
+- **Developer guide** (architecture, patterns, recipes): [DEVELOPING.md](DEVELOPING.md)
 
 ## Stack
 
