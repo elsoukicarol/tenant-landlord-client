@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { View } from 'react-native';
 
 import { color, radius } from '@/theme';
@@ -9,6 +10,7 @@ type Tone = 'neutral' | 'accent' | 'ok' | 'warn' | 'danger' | 'info';
 export type PillProps = {
   label: string;
   tone?: Tone;
+  icon?: keyof typeof Ionicons.glyphMap;
 };
 
 const toneBg: Record<Tone, string> = {
@@ -29,18 +31,23 @@ const toneFg: Record<Tone, string> = {
   info: color.info,
 };
 
-export function Pill({ label, tone = 'neutral' }: PillProps) {
+export function Pill({ label, tone = 'neutral', icon }: PillProps) {
+  const fg = toneFg[tone];
   return (
     <View
       style={{
         alignSelf: 'flex-start',
-        paddingHorizontal: 10,
-        paddingVertical: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+        paddingHorizontal: 9,
+        paddingVertical: 3,
         backgroundColor: toneBg[tone],
         borderRadius: radius.pill,
       }}
     >
-      <Text variant="ui/pill" style={{ color: toneFg[tone] }}>
+      {icon ? <Ionicons name={icon} size={10} color={fg} /> : null}
+      <Text variant="ui/pill" style={{ color: fg }}>
         {label}
       </Text>
     </View>

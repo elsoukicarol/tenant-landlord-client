@@ -9,10 +9,14 @@ import { InvitationsScreen } from '@/features/invitations/screens/InvitationsScr
 import { NewInvitationScreen } from '@/features/invitations/screens/NewInvitationScreen';
 import { NotificationsScreen } from '@/features/notifications/screens/NotificationsScreen';
 import { LandlordDashboardScreen } from '@/features/portfolio/screens/LandlordDashboardScreen';
+import { LanguagePickerScreen } from '@/features/profile/screens/LanguagePickerScreen';
+import { NotificationsSettingsScreen } from '@/features/profile/screens/NotificationsSettingsScreen';
+import { PersonalDetailsScreen } from '@/features/profile/screens/PersonalDetailsScreen';
 import { ProfileScreen } from '@/features/profile/screens/ProfileScreen';
 import { t } from '@/lib/i18n';
 import { color } from '@/theme';
 
+import { tabIcon } from './tabIcons';
 import type {
   LandlordBuildingsStackParamList,
   LandlordDashboardStackParamList,
@@ -126,6 +130,21 @@ function ProfileStack() {
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
+      <Profile.Screen
+        name="ProfilePersonalDetails"
+        component={PersonalDetailsScreen}
+        options={{ title: '' }}
+      />
+      <Profile.Screen
+        name="ProfileNotifications"
+        component={NotificationsSettingsScreen}
+        options={{ title: '' }}
+      />
+      <Profile.Screen
+        name="ProfileLanguage"
+        component={LanguagePickerScreen}
+        options={{ title: '' }}
+      />
     </Profile.Navigator>
   );
 }
@@ -143,32 +162,32 @@ export function LandlordTabs() {
       <Tab.Screen
         name="LandlordDashboard"
         component={DashboardStack}
-        options={{ title: t('nav.dashboard') }}
+        options={{ title: t('nav.dashboard'), tabBarIcon: tabIcon('stats-chart-outline') }}
       />
       <Tab.Screen
         name="LandlordBuildings"
         component={BuildingsStack}
-        options={{ title: t('nav.buildings') }}
+        options={{ title: t('nav.buildings'), tabBarIcon: tabIcon('business-outline') }}
       />
       <Tab.Screen
         name="LandlordExpenses"
         component={ExpensesStack}
-        options={{ title: t('nav.expenses') }}
+        options={{ title: t('nav.expenses'), tabBarIcon: tabIcon('receipt-outline') }}
       />
       <Tab.Screen
         name="LandlordInvitations"
         component={InvitationsStack}
-        options={{ title: t('nav.invitations') }}
+        options={{ title: t('nav.invitations'), tabBarIcon: tabIcon('mail-outline') }}
       />
       <Tab.Screen
         name="LandlordNotifications"
         component={NotificationsStack}
-        options={{ title: t('nav.notifications') }}
+        options={{ title: t('nav.notifications'), tabBarIcon: tabIcon('notifications-outline') }}
       />
       <Tab.Screen
         name="LandlordProfile"
         component={ProfileStack}
-        options={{ title: t('nav.profile') }}
+        options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person-outline') }}
       />
     </Tab.Navigator>
   );

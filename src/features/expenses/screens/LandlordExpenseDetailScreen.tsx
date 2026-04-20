@@ -20,7 +20,7 @@ export function LandlordExpenseDetailScreen() {
   const route = useRoute<DetailRoute>();
   const { id } = route.params;
   const user = useAuthStore(selectUser);
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
 
   const expense = useExpense(id);
   const flag = useFlagExpense();
@@ -91,10 +91,10 @@ export function LandlordExpenseDetailScreen() {
                   <Text variant="body/default">{e.recordedBy.name}</Text>
                 </View>
               ) : null}
-              {e.linkedRequestId ? (
+              {e.requestId ? (
                 <View>
                   <Text variant="mono/label">{t('expenses.linkedRequest')}</Text>
-                  <Text variant="body/default">{e.linkedRequestId}</Text>
+                  <Text variant="body/default">{e.requestId}</Text>
                 </View>
               ) : null}
             </Card>

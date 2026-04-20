@@ -58,7 +58,7 @@ export function RequestDetailScreen() {
   const { id } = route.params;
   const user = useAuthStore(selectUser);
   const role = user?.role ?? 'tenant';
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
 
   const detail = useRequest(id);
   const schedule = useRequestSchedule(id);

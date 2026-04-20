@@ -19,7 +19,7 @@ type Nav = NavigationProp<LandlordExpensesStackParamList>;
 export function LandlordExpensesScreen() {
   const navigation = useNavigation<Nav>();
   const user = useAuthStore(selectUser);
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
   const [buildingId, setBuildingId] = useState<string | null>(null);
 
   const { from, to } = useMemo(() => monthRange(), []);
@@ -71,11 +71,11 @@ export function LandlordExpensesScreen() {
       <Card elevated style={{ gap: 6, marginBottom: 16 }}>
         <Text variant="mono/label">{t('expenses.thisMonth')}</Text>
         <Text variant="display/stat-medium">
-          {summary.isLoading ? '…' : formatCurrency(summary.data?.totalExpenses ?? 0, locale)}
+          {summary.isLoading ? '…' : formatCurrency(summary.data?.totalAmount ?? 0, locale)}
         </Text>
-        {summary.data?.count !== undefined ? (
+        {summary.data?.entryCount !== undefined ? (
           <Text variant="ui/caption">
-            {t('expenses.entriesCount', { count: summary.data.count })}
+            {t('expenses.entriesCount', { count: summary.data.entryCount })}
           </Text>
         ) : null}
       </Card>

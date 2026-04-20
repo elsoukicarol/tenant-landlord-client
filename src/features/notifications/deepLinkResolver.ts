@@ -56,8 +56,9 @@ export function resolveDeepLink(
         },
       });
     } else if (role === 'maintainer') {
+      // Announcements now live under the Home stack (no dedicated tab).
       nav.navigate('MaintainerRoot', {
-        screen: 'MaintainerAnnouncements',
+        screen: 'MaintainerHome',
         params: {
           screen: 'MaintainerAnnouncementDetail',
           params: { id: link.announcementId },

@@ -1,13 +1,12 @@
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation, type CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useMemo } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 
 import { isApiError } from '@/api/errors';
-import { AccentItalic, Banner, Card, EmptyState, Screen, Text } from '@/components/ui';
+import { AccentItalic, Card, EmptyState, Screen, Text } from '@/components/ui';
 import { selectUser, useAuthStore } from '@/features/auth/store';
-import { PLACEHOLDER, formatCurrency } from '@/lib/format';
+import { formatCurrency } from '@/lib/format';
 import { t } from '@/lib/i18n';
 import type { LandlordDashboardStackParamList, LandlordTabParamList } from '@/navigation/types';
 import { color, radius } from '@/theme';
@@ -23,10 +22,9 @@ type Nav = CompositeNavigationProp<
 export function LandlordDashboardScreen() {
   const navigation = useNavigation<Nav>();
   const user = useAuthStore(selectUser);
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
 
-  const period = useMemo(() => currentYearMonth(), []);
-  const dashboard = usePortfolioDashboard(period);
+  const dashboard = usePortfolioDashboard();
 
   if (dashboard.isLoading) {
     return (
@@ -48,17 +46,8 @@ export function LandlordDashboardScreen() {
     );
   }
 
-  const { buildings, summary } = dashboard.data;
+  const { buildings, totals } = dashboard.data;
   const firstName = user?.name.split(' ')[0] ?? '';
-
-  const expensesDisplay =
-    summary.monthlyExpenses === null || summary.monthlyExpenses === undefined
-      ? PLACEHOLDER
-      : formatCurrency(summary.monthlyExpenses, locale);
-  const netIncomeDisplay =
-    summary.netIncome === null || summary.netIncome === undefined
-      ? PLACEHOLDER
-      : formatCurrency(summary.netIncome, locale);
 
   return (
     <Screen>
@@ -68,43 +57,31 @@ export function LandlordDashboardScreen() {
             {t('portfolio.heroPrefix')}
             <AccentItalic>{firstName}</AccentItalic>.
           </Text>
-          <Text variant="body/lead">
-            {t('portfolio.heroSubtitle', { period: formatPeriodLabel(period, locale) })}
-          </Text>
+          <Text variant="body/lead">{t('portfolio.heroSubtitle')}</Text>
         </View>
-
-        {summary.monthlyExpenses === null || summary.monthlyExpenses === undefined ? (
-          <Banner tone="info" message={t('portfolio.expensesPlaceholderNote')} />
-        ) : null}
 
         <Card elevated style={{ gap: 12 }}>
           <Text variant="mono/label">{t('portfolio.netIncome')}</Text>
-          <Text variant="display/stat-large">{netIncomeDisplay}</Text>
-          {summary.netIncomeDeltaPct !== null && summary.netIncomeDeltaPct !== undefined ? (
-            <Text variant="ui/caption">
-              {t('portfolio.vsLastPeriod', {
-                delta: summary.netIncomeDeltaPct.toFixed(1),
-              })}
-            </Text>
-          ) : (
-            <Text variant="ui/caption">{PLACEHOLDER}</Text>
-          )}
+          <Text variant="display/stat-large">{formatCurrency(totals.netIncome, locale)}</Text>
         </Card>
 
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <StatCard
             label={t('portfolio.monthlyRent')}
-            value={formatCurrency(summary.monthlyRent, locale)}
+            value={formatCurrency(totals.totalMonthlyRent, locale)}
           />
-          <StatCard label={t('portfolio.monthlyExpenses')} value={expensesDisplay} />
+          <StatCard
+            label={t('portfolio.monthlyExpenses')}
+            value={formatCurrency(totals.totalExpenses, locale)}
+          />
         </View>
 
         <View style={{ flexDirection: 'row', gap: 12 }}>
           <StatCard
             label={t('portfolio.occupied')}
-            value={`${summary.occupiedUnits}/${summary.totalUnits}`}
+            value={`${totals.occupiedUnits}/${totals.totalUnits}`}
           />
-          <StatCard label={t('portfolio.vacant')} value={summary.vacantUnits.toString()} />
+          <StatCard label={t('portfolio.vacant')} value={totals.vacantUnits.toString()} />
         </View>
 
         <View style={{ gap: 12 }}>
@@ -141,14 +118,8 @@ function PortfolioBuildingCard({
   locale: 'es' | 'en';
   onPress: () => void;
 }) {
-  const expenses =
-    building.monthlyExpenses === null || building.monthlyExpenses === undefined
-      ? PLACEHOLDER
-      : formatCurrency(building.monthlyExpenses, locale);
-  const net =
-    building.netIncome === null || building.netIncome === undefined
-      ? PLACEHOLDER
-      : formatCurrency(building.netIncome, locale);
+  const expenses = building.expenses?.totalAmount ?? 0;
+  const net = building.totalMonthlyRent - expenses;
 
   return (
     <Pressable
@@ -170,20 +141,21 @@ function PortfolioBuildingCard({
               <Text variant="display/card-title">{building.name}</Text>
               <Text variant="body/small">{building.address}</Text>
             </View>
-            {building.openRequests !== undefined && building.openRequests > 0 ? (
-              <View
-                style={{
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                  backgroundColor: color.accentSoft,
-                  borderRadius: radius.pill,
-                }}
-              >
-                <Text variant="ui/tiny" style={{ color: color.accent }}>
-                  {t('portfolio.openCount', { count: building.openRequests })}
-                </Text>
-              </View>
-            ) : null}
+            <View
+              style={{
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                backgroundColor: color.lineSoft,
+                borderRadius: radius.pill,
+              }}
+            >
+              <Text variant="ui/tiny" style={{ color: color.inkSoft }}>
+                {t('buildings.occupancy', {
+                  occupied: building.occupiedUnits,
+                  total: building.totalUnits,
+                })}
+              </Text>
+            </View>
           </View>
           <View
             style={{
@@ -195,14 +167,10 @@ function PortfolioBuildingCard({
           >
             <Metric
               label={t('portfolio.rent')}
-              value={
-                building.monthlyRent !== undefined
-                  ? formatCurrency(building.monthlyRent, locale)
-                  : PLACEHOLDER
-              }
+              value={formatCurrency(building.totalMonthlyRent, locale)}
             />
-            <Metric label={t('portfolio.exp')} value={expenses} />
-            <Metric label={t('portfolio.net')} value={net} strong />
+            <Metric label={t('portfolio.exp')} value={formatCurrency(expenses, locale)} />
+            <Metric label={t('portfolio.net')} value={formatCurrency(net, locale)} strong />
           </View>
         </View>
       </Card>
@@ -226,19 +194,4 @@ function StatCard({ label, value }: { label: string; value: string }) {
       <Text variant="display/stat-medium">{value}</Text>
     </Card>
   );
-}
-
-function currentYearMonth(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-}
-
-function formatPeriodLabel(period: string, locale: 'es' | 'en'): string {
-  const [y, m] = period.split('-');
-  if (!y || !m) return period;
-  const date = new Date(Number(y), Number(m) - 1, 1);
-  return date.toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', {
-    month: 'long',
-    year: 'numeric',
-  });
 }

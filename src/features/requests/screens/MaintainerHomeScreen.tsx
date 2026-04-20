@@ -1,7 +1,8 @@
+import { Ionicons } from '@expo/vector-icons';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { useNavigation, type CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 
 import { AccentItalic, Button, Card, EmptyState, Screen, Text } from '@/components/ui';
 import { useAuthStore } from '@/features/auth/store';
@@ -21,7 +22,7 @@ type Nav = CompositeNavigationProp<
 export function MaintainerHomeScreen() {
   const navigation = useNavigation<Nav>();
   const user = useAuthStore((s) => s.user);
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
 
   const open = useRequestList({ status: 'OPEN', limit: 5 });
   const inProgress = useRequestList({ status: 'IN_PROGRESS', limit: 1 });
@@ -39,12 +40,62 @@ export function MaintainerHomeScreen() {
   return (
     <Screen>
       <ScrollView contentContainerStyle={{ gap: 20, paddingBottom: 40 }}>
-        <View style={{ gap: 8 }}>
-          <Text variant="display/hero">
-            {t('home.greetingPrefix')}
-            <AccentItalic>{firstName}</AccentItalic>.
-          </Text>
-          <Text variant="body/lead">{t('home.maintainerSubtitle', { count: buildingCount })}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 12,
+          }}
+        >
+          <View style={{ flex: 1, gap: 8 }}>
+            <Text variant="display/hero">
+              {t('home.greetingPrefix')}
+              <AccentItalic>{firstName}</AccentItalic>.
+            </Text>
+            <Text variant="body/lead">
+              {t('home.maintainerSubtitle', { count: buildingCount })}
+            </Text>
+          </View>
+
+          <View style={{ flexDirection: 'row', gap: 4 }}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('MaintainerHome', {
+                  screen: 'MaintainerAnnouncementsList',
+                })
+              }
+              accessibilityRole="button"
+              accessibilityLabel={t('nav.announcements')}
+              hitSlop={8}
+              style={{
+                width: 44,
+                height: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="megaphone-outline" size={22} color={color.ink} />
+            </Pressable>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('MaintainerHome', {
+                  screen: 'MaintainerNotificationsList',
+                })
+              }
+              accessibilityRole="button"
+              accessibilityLabel={t('nav.notifications')}
+              hitSlop={8}
+              style={{
+                width: 44,
+                height: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="notifications-outline" size={22} color={color.ink} />
+            </Pressable>
+          </View>
         </View>
 
         <View style={{ flexDirection: 'row', gap: 12 }}>

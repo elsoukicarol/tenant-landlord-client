@@ -73,6 +73,7 @@ export type CreateAnnouncementInput = {
   title: string;
   message: string;
   type: AnnouncementType;
+  scheduledDate?: string;
   unitIds?: string[];
 };
 

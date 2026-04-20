@@ -5,8 +5,8 @@ describe('statusTone', () => {
     expect(statusTone('OPEN')).toBe('accent');
     expect(statusTone('DISPUTED')).toBe('danger');
   });
-  it('maps RESOLVED to ok and CLOSED to neutral', () => {
-    expect(statusTone('RESOLVED')).toBe('ok');
+  it('maps RESOLVED to warn (awaiting sign-off) and CLOSED to neutral', () => {
+    expect(statusTone('RESOLVED')).toBe('warn');
     expect(statusTone('CLOSED')).toBe('neutral');
   });
 });

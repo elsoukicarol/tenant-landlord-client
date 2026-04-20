@@ -5,16 +5,13 @@ import { FlatList, View } from 'react-native';
 import { Button, EmptyState, Screen, Text } from '@/components/ui';
 import { selectUser, useAuthStore } from '@/features/auth/store';
 import { t } from '@/lib/i18n';
-import type { MaintainerAnnouncementsStackParamList } from '@/navigation/types';
+import type { MaintainerHomeStackParamList } from '@/navigation/types';
 
 import { useAnnouncementList } from '../api';
 import { AnnouncementCard } from '../components/AnnouncementCard';
 import { AnnouncementCardSkeletonList } from '../components/AnnouncementCardSkeleton';
 
-type Nav = NativeStackNavigationProp<
-  MaintainerAnnouncementsStackParamList,
-  'MaintainerAnnouncementsList'
->;
+type Nav = NativeStackNavigationProp<MaintainerHomeStackParamList, 'MaintainerAnnouncementsList'>;
 
 export function MaintainerAnnouncementsScreen() {
   const navigation = useNavigation<Nav>();
@@ -62,7 +59,7 @@ export function MaintainerAnnouncementsScreen() {
           renderItem={({ item }) => (
             <AnnouncementCard
               announcement={item}
-              locale={user?.language ?? 'es'}
+              locale={user?.language ?? 'en'}
               onPress={() => navigation.navigate('MaintainerAnnouncementDetail', { id: item.id })}
             />
           )}

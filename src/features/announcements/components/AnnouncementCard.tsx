@@ -10,14 +10,14 @@ import type { AnnouncementListItem, AnnouncementType } from '../types';
 const toneByType: Record<AnnouncementType, 'neutral' | 'info' | 'accent' | 'warn' | 'danger'> = {
   GENERAL: 'neutral',
   MAINTENANCE: 'info',
-  URGENT: 'warn',
+  RULE_UPDATE: 'info',
   EMERGENCY: 'danger',
 };
 
 export function AnnouncementCard({
   announcement,
   onPress,
-  locale = 'es',
+  locale = 'en',
 }: {
   announcement: AnnouncementListItem;
   onPress: () => void;
@@ -44,7 +44,7 @@ export function AnnouncementCard({
               defaultValue: announcement.type,
             })}
           />
-          {!announcement.isRead ? (
+          {announcement.readAt == null ? (
             <View
               accessibilityLabel="Unread"
               style={{

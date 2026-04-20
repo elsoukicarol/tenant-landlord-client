@@ -4,6 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AnnouncementDetailScreen } from '@/features/announcements/screens/AnnouncementDetailScreen';
 import { AnnouncementsListScreen } from '@/features/announcements/screens/AnnouncementsListScreen';
 import { NotificationsScreen } from '@/features/notifications/screens/NotificationsScreen';
+import { LanguagePickerScreen } from '@/features/profile/screens/LanguagePickerScreen';
+import { NotificationsSettingsScreen } from '@/features/profile/screens/NotificationsSettingsScreen';
+import { PersonalDetailsScreen } from '@/features/profile/screens/PersonalDetailsScreen';
 import { ProfileScreen } from '@/features/profile/screens/ProfileScreen';
 import { TenantHomeScreen } from '@/features/requests/screens/HomeScreen';
 import { MyRequestsScreen } from '@/features/requests/screens/MyRequestsScreen';
@@ -12,6 +15,7 @@ import { SubmitRequestScreen } from '@/features/requests/screens/SubmitRequestSc
 import { t } from '@/lib/i18n';
 import { color } from '@/theme';
 
+import { tabIcon } from './tabIcons';
 import type {
   TenantAnnouncementsStackParamList,
   TenantHomeStackParamList,
@@ -110,6 +114,21 @@ function ProfileStackScreen() {
         component={ProfileScreen}
         options={{ headerShown: false }}
       />
+      <ProfileStack.Screen
+        name="ProfilePersonalDetails"
+        component={PersonalDetailsScreen}
+        options={{ title: '' }}
+      />
+      <ProfileStack.Screen
+        name="ProfileNotifications"
+        component={NotificationsSettingsScreen}
+        options={{ title: '' }}
+      />
+      <ProfileStack.Screen
+        name="ProfileLanguage"
+        component={LanguagePickerScreen}
+        options={{ title: '' }}
+      />
     </ProfileStack.Navigator>
   );
 }
@@ -127,27 +146,27 @@ export function TenantTabs() {
       <Tab.Screen
         name="TenantHome"
         component={HomeStackScreen}
-        options={{ title: t('nav.home') }}
+        options={{ title: t('nav.home'), tabBarIcon: tabIcon('home-outline') }}
       />
       <Tab.Screen
         name="TenantRequests"
         component={RequestsStackScreen}
-        options={{ title: t('nav.requests') }}
+        options={{ title: t('nav.requests'), tabBarIcon: tabIcon('construct-outline') }}
       />
       <Tab.Screen
         name="TenantAnnouncements"
         component={AnnouncementsStackScreen}
-        options={{ title: t('nav.announcements') }}
+        options={{ title: t('nav.announcements'), tabBarIcon: tabIcon('megaphone-outline') }}
       />
       <Tab.Screen
         name="TenantNotifications"
         component={NotificationsStackScreen}
-        options={{ title: t('nav.notifications') }}
+        options={{ title: t('nav.notifications'), tabBarIcon: tabIcon('notifications-outline') }}
       />
       <Tab.Screen
         name="TenantProfile"
         component={ProfileStackScreen}
-        options={{ title: t('nav.profile') }}
+        options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person-outline') }}
       />
     </Tab.Navigator>
   );

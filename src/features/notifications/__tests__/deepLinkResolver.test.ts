@@ -45,11 +45,11 @@ describe('deep link resolver', () => {
     });
   });
 
-  it('routes maintainer announcementId into MaintainerAnnouncements > detail', () => {
+  it('routes maintainer announcementId into Home > AnnouncementDetail', () => {
     const { nav, navigate } = makeNav();
     resolveDeepLink({ announcementId: 'ann-1' }, nav, 'maintainer');
     expect(navigate).toHaveBeenCalledWith('MaintainerRoot', {
-      screen: 'MaintainerAnnouncements',
+      screen: 'MaintainerHome',
       params: {
         screen: 'MaintainerAnnouncementDetail',
         params: { id: 'ann-1' },

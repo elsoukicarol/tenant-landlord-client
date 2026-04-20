@@ -1,24 +1,34 @@
-import type { BuildingListItem } from '@/features/buildings/types';
+import type { UserRef } from '@/features/requests/types';
 
-export type PortfolioBuilding = BuildingListItem & {
-  monthlyRent?: number;
-  monthlyExpenses?: number | null;
-  netIncome?: number | null;
-  openRequests?: number;
+export type PortfolioBuildingExpenses = {
+  totalAmount: number;
+  byCategory: Record<string, number>;
+  count: number;
 };
 
-export type PortfolioSummary = {
+export type PortfolioBuilding = {
+  id: string;
+  name: string;
+  address: string;
+  maintainer: UserRef | null;
   totalUnits: number;
   occupiedUnits: number;
   vacantUnits: number;
-  monthlyRent: number;
-  monthlyExpenses?: number | null;
-  netIncome?: number | null;
-  deltaVsPreviousPeriod?: number | null;
-  netIncomeDeltaPct?: number | null;
+  occupancyRate: number;
+  totalMonthlyRent: number;
+  expenses: PortfolioBuildingExpenses;
+};
+
+export type PortfolioTotals = {
+  totalUnits: number;
+  occupiedUnits: number;
+  vacantUnits: number;
+  totalMonthlyRent: number;
+  totalExpenses: number;
+  netIncome: number;
 };
 
 export type PortfolioDashboard = {
   buildings: PortfolioBuilding[];
-  summary: PortfolioSummary;
+  totals: PortfolioTotals;
 };

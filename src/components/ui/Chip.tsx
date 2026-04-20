@@ -10,7 +10,16 @@ export type ChipProps = Omit<PressableProps, 'children'> & {
   count?: number;
 };
 
+/**
+ * Filter pill, matching the Figma pattern:
+ *   selected   → ink background, paper text, no border
+ *   unselected → paper background, line border, ink-soft text
+ */
 export function Chip({ label, selected = false, count, style, ...rest }: ChipProps) {
+  const bg = selected ? color.ink : color.paper;
+  const border = selected ? color.ink : color.line;
+  const fg = selected ? color.paper : color.inkSoft;
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -19,11 +28,11 @@ export function Chip({ label, selected = false, count, style, ...rest }: ChipPro
       style={(state) => [
         {
           minHeight: MIN_TAP_TARGET - 8,
-          paddingHorizontal: 14,
-          paddingVertical: 8,
-          backgroundColor: selected ? color.ink : color.paper,
+          paddingHorizontal: 12,
+          paddingVertical: 6,
+          backgroundColor: bg,
           borderWidth: 1,
-          borderColor: selected ? color.ink : color.line,
+          borderColor: border,
           borderRadius: radius.pill,
           alignItems: 'center',
           justifyContent: 'center',
@@ -33,7 +42,7 @@ export function Chip({ label, selected = false, count, style, ...rest }: ChipPro
       ]}
       {...rest}
     >
-      <Text variant="ui/chip" style={{ color: selected ? color.paper : color.inkSoft }}>
+      <Text variant="ui/chip" style={{ color: fg, fontSize: 11 }}>
         {label}
         {count !== undefined ? ` · ${count}` : ''}
       </Text>

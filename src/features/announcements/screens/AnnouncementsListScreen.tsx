@@ -42,7 +42,7 @@ export function AnnouncementsListScreen() {
           renderItem={({ item }) => (
             <AnnouncementCard
               announcement={item}
-              locale={user?.language ?? 'es'}
+              locale={user?.language ?? 'en'}
               onPress={() => navigation.navigate('TenantAnnouncementDetail', { id: item.id })}
             />
           )}

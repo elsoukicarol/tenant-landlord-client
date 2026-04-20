@@ -13,7 +13,7 @@ export type InputProps = TextInputProps & {
 };
 
 export const Input = forwardRef<TextInput, InputProps>(function Input(
-  { label, error, hint, rightAction, style, onFocus, onBlur, ...rest },
+  { label, error, hint, rightAction, style, onFocus, onBlur, multiline, ...rest },
   ref,
 ) {
   const [focused, setFocused] = useState(false);
@@ -23,25 +23,26 @@ export const Input = forwardRef<TextInput, InputProps>(function Input(
   return (
     <View style={{ gap: 6 }}>
       {label ? (
-        <Text variant="ui/label-strong" style={{ color: color.inkSoft }}>
+        <Text variant="eyebrow" style={{ color: color.inkMute }}>
           {label}
         </Text>
       ) : null}
 
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: color.paper,
+          flexDirection: multiline ? 'column' : 'row',
+          alignItems: multiline ? 'stretch' : 'center',
+          backgroundColor: color.paperWarm,
           borderWidth: 1,
           borderColor,
           borderRadius: radius.lg,
           paddingHorizontal: 14,
-          minHeight: 48,
+          minHeight: 46,
         }}
       >
         <TextInput
           ref={ref}
+          multiline={multiline}
           style={[
             typography['body/default'],
             { flex: 1, color: color.ink, paddingVertical: 12 },

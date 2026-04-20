@@ -5,16 +5,14 @@ import { api } from '@/api/client';
 import type { PortfolioDashboard } from './types';
 
 export const portfolioKeys = {
-  dashboard: (period?: string) => ['portfolio', 'dashboard', period] as const,
+  dashboard: ['portfolio', 'dashboard'] as const,
 };
 
-export function usePortfolioDashboard(period?: string) {
+export function usePortfolioDashboard() {
   return useQuery({
-    queryKey: portfolioKeys.dashboard(period),
+    queryKey: portfolioKeys.dashboard,
     queryFn: async () => {
-      const res = await api.get<PortfolioDashboard>('/portfolio/dashboard', {
-        ...(period ? { period } : {}),
-      });
+      const res = await api.get<PortfolioDashboard>('/portfolio/dashboard');
       return res.data;
     },
     staleTime: 60_000,

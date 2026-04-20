@@ -18,18 +18,18 @@ export function AnnouncementDetailScreen() {
   const route = useRoute<RouteT>();
   const { id } = route.params;
   const user = useAuthStore(selectUser);
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
 
   const detail = useAnnouncement(id);
   const markRead = useMarkAnnouncementRead();
 
   useEffect(() => {
-    if (detail.data && !detail.data.isRead) {
+    if (detail.data && detail.data.readAt == null) {
       markRead.mutate(detail.data.id);
     }
     // Intentionally run once per detail fetch; skip markRead identity churn.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detail.data?.id, detail.data?.isRead]);
+  }, [detail.data?.id, detail.data?.readAt]);
 
   if (detail.isLoading) {
     return (

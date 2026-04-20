@@ -8,7 +8,7 @@ import type { Comment } from '../types';
 
 export function CommentsList({
   comments,
-  locale = 'es',
+  locale = 'en',
 }: {
   comments: Comment[];
   locale?: 'es' | 'en';

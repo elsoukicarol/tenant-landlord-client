@@ -29,6 +29,9 @@ export type TenantNotificationsStackParamList = {
 
 export type TenantProfileStackParamList = {
   TenantProfileIndex: undefined;
+  ProfilePersonalDetails: undefined;
+  ProfileNotifications: undefined;
+  ProfileLanguage: undefined;
 };
 
 export type TenantTabParamList = {
@@ -45,6 +48,12 @@ export type MaintainerHomeStackParamList = {
   MaintainerHomeIndex: undefined;
   MaintainerRequestDetail: { id: string };
   MaintainerResolveRequest: { id: string };
+  // Announcements + Notifications are reachable from Home header icons, not
+  // as separate bottom tabs — matches the Figma 6-tab layout.
+  MaintainerAnnouncementsList: undefined;
+  MaintainerAnnouncementDetail: { id: string };
+  MaintainerCreateAnnouncement: undefined;
+  MaintainerNotificationsList: undefined;
 };
 
 export type MaintainerRequestsStackParamList = {
@@ -63,12 +72,6 @@ export type MaintainerExpensesStackParamList = {
   MaintainerCreateExpense: undefined;
 };
 
-export type MaintainerAnnouncementsStackParamList = {
-  MaintainerAnnouncementsList: undefined;
-  MaintainerAnnouncementDetail: { id: string };
-  MaintainerCreateAnnouncement: undefined;
-};
-
 export type MaintainerInvitationsStackParamList = {
   MaintainerInvitationsList: undefined;
   MaintainerNewInvitation: undefined;
@@ -76,10 +79,9 @@ export type MaintainerInvitationsStackParamList = {
 
 export type MaintainerProfileStackParamList = {
   MaintainerProfileIndex: undefined;
-};
-
-export type MaintainerNotificationsStackParamList = {
-  MaintainerNotificationsList: undefined;
+  ProfilePersonalDetails: undefined;
+  ProfileNotifications: undefined;
+  ProfileLanguage: undefined;
 };
 
 export type MaintainerTabParamList = {
@@ -87,9 +89,7 @@ export type MaintainerTabParamList = {
   MaintainerRequests: NavigatorScreenParams<MaintainerRequestsStackParamList>;
   MaintainerBuildings: NavigatorScreenParams<MaintainerBuildingsStackParamList>;
   MaintainerExpenses: NavigatorScreenParams<MaintainerExpensesStackParamList>;
-  MaintainerAnnouncements: NavigatorScreenParams<MaintainerAnnouncementsStackParamList>;
   MaintainerInvitations: NavigatorScreenParams<MaintainerInvitationsStackParamList>;
-  MaintainerNotifications: NavigatorScreenParams<MaintainerNotificationsStackParamList>;
   MaintainerProfile: NavigatorScreenParams<MaintainerProfileStackParamList>;
 };
 
@@ -121,6 +121,9 @@ export type LandlordNotificationsStackParamList = {
 
 export type LandlordProfileStackParamList = {
   LandlordProfileIndex: undefined;
+  ProfilePersonalDetails: undefined;
+  ProfileNotifications: undefined;
+  ProfileLanguage: undefined;
 };
 
 export type LandlordTabParamList = {

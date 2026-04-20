@@ -6,8 +6,8 @@ import es from '@/locales/es.json';
 export const i18n = new I18n(
   { es, en },
   {
-    locale: 'es',
-    defaultLocale: 'es',
+    locale: 'en',
+    defaultLocale: 'en',
     enableFallback: true,
     missingBehavior: 'guess',
   },

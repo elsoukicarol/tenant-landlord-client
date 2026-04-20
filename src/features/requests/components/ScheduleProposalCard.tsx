@@ -16,7 +16,7 @@ const toneByStatus: Record<ProposalStatus, 'neutral' | 'ok' | 'danger' | 'warn'>
 
 export function ScheduleProposalCard({
   proposal,
-  locale = 'es',
+  locale = 'en',
   actions,
 }: {
   proposal: ScheduleProposal;

@@ -1,163 +1,280 @@
-import { useState } from 'react';
-import { ScrollView, Switch, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, type NavigationProp, type ParamListBase } from '@react-navigation/native';
+import { Alert, Pressable, ScrollView, View } from 'react-native';
 
-import { Button, Card, Chip, Input, Screen, Text } from '@/components/ui';
-import { useLogout, useUpdateMe } from '@/features/auth/api';
+import { Screen, Text } from '@/components/ui';
+import { useLogout } from '@/features/auth/api';
 import { selectUser, useAuthStore } from '@/features/auth/store';
 import { unregisterPushToken } from '@/features/devices/api';
-import { type Language, setLanguage, t } from '@/lib/i18n';
+import { i18n, t } from '@/lib/i18n';
 import { color, radius } from '@/theme';
 
-export function ProfileScreen() {
-  const user = useAuthStore(selectUser);
-  const updateMe = useUpdateMe();
-  const logout = useLogout();
+type IconName = keyof typeof Ionicons.glyphMap;
 
-  const [name, setName] = useState(user?.name ?? '');
-  const [language, setLang] = useState<Language>(user?.language ?? 'es');
-  const [prefs, setPrefs] = useState(
-    user?.notificationPrefs ?? {
-      pushEnabled: true,
-      urgentOnly: false,
-      emailEnabled: true,
-    },
-  );
+export function ProfileScreen() {
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const user = useAuthStore(selectUser);
+  const logout = useLogout();
 
   if (!user) return <Screen />;
 
-  const hasChanges =
-    name.trim() !== user.name ||
-    language !== user.language ||
-    JSON.stringify(prefs) !== JSON.stringify(user.notificationPrefs ?? {});
+  const initials = getInitials(user.name);
+  const prefs = user.notificationPrefs;
+  const notificationSummary = prefs
+    ? prefs.urgentOnly
+      ? t('profile.urgentOnly')
+      : prefs.pushEnabled
+        ? t('profile.allEnabled')
+        : t('profile.muted')
+    : undefined;
+  const languageLabel = user.language === 'es' ? 'Español' : 'English';
 
-  const save = () => {
-    updateMe.mutate(
+  const confirmSignOut = () => {
+    Alert.alert(t('auth.signOut'), t('profile.signOutConfirmBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        name: name.trim(),
-        language,
-        notificationPrefs: prefs,
-      },
-      {
-        onSuccess: () => {
-          setLanguage(language);
+        text: t('auth.signOut'),
+        style: 'destructive',
+        onPress: async () => {
+          await unregisterPushToken();
+          logout.mutate();
         },
       },
-    );
-  };
-
-  const signOut = async () => {
-    await unregisterPushToken();
-    logout.mutate();
+    ]);
   };
 
   return (
-    <Screen>
-      <ScrollView contentContainerStyle={{ gap: 20, paddingBottom: 40 }}>
-        <Text variant="display/screen-title">{t('profile.title')}</Text>
+    <Screen edges={['top']} padding={0}>
+      <TopBar
+        title={t('profile.title')}
+        onEdit={() => navigation.navigate('ProfilePersonalDetails')}
+      />
 
-        <Card style={{ gap: 12 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+        <View
+          style={{
+            paddingVertical: 32,
+            paddingHorizontal: 20,
+            gap: 12,
+            alignItems: 'center',
+            backgroundColor: color.paperWarm,
+            borderBottomWidth: 1,
+            borderBottomColor: color.lineSoft,
+          }}
+        >
           <View
             style={{
               width: 64,
               height: 64,
               borderRadius: radius.pill,
-              backgroundColor: color.accentSoft,
+              borderWidth: 1,
+              borderColor: color.line,
+              backgroundColor: color.paperWarm,
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Text variant="display/card-title" style={{ color: color.accent }}>
-              {user.name.charAt(0).toUpperCase()}
+            <Text variant="display/stat-medium" style={{ color: color.inkSoft, fontSize: 26 }}>
+              {initials}
             </Text>
           </View>
-          <Text variant="ui/label">{user.email}</Text>
-          <Text variant="ui/tiny" style={{ textTransform: 'uppercase' }}>
-            {t(`roles.${user.role}`, { defaultValue: user.role })}
-          </Text>
-        </Card>
-
-        <Input
-          label={t('auth.fullName')}
-          value={name}
-          onChangeText={setName}
-          editable={!updateMe.isPending}
-          accessibilityLabel={t('auth.fullName')}
-        />
-
-        <View style={{ gap: 8 }}>
-          <Text variant="ui/label-strong">{t('profile.language')}</Text>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            <Chip label="Español" selected={language === 'es'} onPress={() => setLang('es')} />
-            <Chip label="English" selected={language === 'en'} onPress={() => setLang('en')} />
+          <View style={{ alignItems: 'center', gap: 4 }}>
+            <Text variant="display/card-title">{user.name}</Text>
+            <Text variant="ui/tiny" style={{ color: color.inkMute }}>
+              {user.email}
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: color.ink,
+              borderRadius: radius.pill,
+              paddingHorizontal: 12,
+              paddingVertical: 4,
+            }}
+          >
+            <Text variant="ui/pill" style={{ color: color.paper }}>
+              {capitalize(t(`roles.${user.role}`, { defaultValue: user.role }))}
+            </Text>
           </View>
         </View>
 
-        <Card style={{ gap: 16 }}>
-          <Text variant="ui/label-strong">{t('profile.notifications')}</Text>
-          <PrefRow
-            label={t('profile.pushEnabled')}
-            value={prefs.pushEnabled}
-            onValueChange={(v) => setPrefs({ ...prefs, pushEnabled: v })}
-          />
-          <PrefRow
-            label={t('profile.urgentOnly')}
-            value={prefs.urgentOnly}
-            onValueChange={(v) => setPrefs({ ...prefs, urgentOnly: v })}
-          />
-          <PrefRow
-            label={t('profile.emailEnabled')}
-            value={prefs.emailEnabled}
-            onValueChange={(v) => setPrefs({ ...prefs, emailEnabled: v })}
-          />
-        </Card>
+        <View style={{ paddingHorizontal: 20, paddingTop: 20, gap: 24 }}>
+          <Section title={t('profile.sectionAccount')}>
+            <NavRow
+              icon="person-outline"
+              label={t('profile.personalDetails')}
+              onPress={() => navigation.navigate('ProfilePersonalDetails')}
+            />
+            <NavRow
+              icon="notifications-outline"
+              label={t('profile.notifications')}
+              trailing={notificationSummary}
+              onPress={() => navigation.navigate('ProfileNotifications')}
+            />
+            <NavRow
+              icon="globe-outline"
+              label={t('profile.language')}
+              trailing={languageLabel}
+              onPress={() => navigation.navigate('ProfileLanguage')}
+              isLast
+            />
+          </Section>
 
-        <Button
-          label={t('common.save')}
-          onPress={save}
-          loading={updateMe.isPending}
-          disabled={!hasChanges}
-          fullWidth
-        />
+          <Section title={t('profile.sectionSecurity')}>
+            <NavRow
+              icon="shield-outline"
+              label={t('profile.passwordSignIn')}
+              onPress={() => Alert.alert(t('profile.comingSoonTitle'), t('profile.comingSoonBody'))}
+              isLast
+            />
+          </Section>
 
-        <Button
-          label={t('auth.signOut')}
-          variant="secondary"
-          onPress={signOut}
-          loading={logout.isPending}
-          fullWidth
-        />
+          <Section title={t('profile.sectionHelp')}>
+            <NavRow
+              icon="help-circle-outline"
+              label={t('profile.supportFaqs')}
+              onPress={() => Alert.alert(t('profile.comingSoonTitle'), t('profile.comingSoonBody'))}
+            />
+            <NavRow
+              icon="log-out-outline"
+              iconBackground={color.dangerSoft}
+              iconColor={color.danger}
+              label={t('auth.signOut')}
+              labelColor={color.danger}
+              onPress={confirmSignOut}
+              hideChevron
+              isLast
+            />
+          </Section>
+
+          <Text variant="ui/tiny" style={{ textAlign: 'center', marginTop: 12 }}>
+            {t('common.appName')} · v0.1.0 · {i18n.locale.toUpperCase()}
+          </Text>
+        </View>
       </ScrollView>
     </Screen>
   );
 }
 
-function PrefRow({
-  label,
-  value,
-  onValueChange,
-}: {
-  label: string;
-  value: boolean;
-  onValueChange: (v: boolean) => void;
-}) {
+function TopBar({ title, onEdit }: { title: string; onEdit: () => void }) {
   return (
     <View
       style={{
+        paddingHorizontal: 20,
+        paddingTop: 12,
+        paddingBottom: 16,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        minHeight: 44,
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderBottomColor: color.lineSoft,
       }}
     >
-      <Text variant="body/default" style={{ flex: 1 }}>
-        {label}
-      </Text>
-      <Switch
-        value={value}
-        onValueChange={onValueChange}
-        accessibilityLabel={label}
-        trackColor={{ false: color.line, true: color.accent }}
-      />
+      <Text variant="title/app">{title}</Text>
+      <Pressable
+        onPress={onEdit}
+        accessibilityRole="button"
+        accessibilityLabel={t('profile.edit')}
+        hitSlop={8}
+        style={{
+          width: 34,
+          height: 34,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: color.paperWarm,
+          borderRadius: radius.pill,
+        }}
+      >
+        <Ionicons name="create-outline" size={16} color={color.ink} />
+      </Pressable>
     </View>
   );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <View>
+      <View style={{ paddingBottom: 8 }}>
+        <Text variant="eyebrow">{title}</Text>
+      </View>
+      {children}
+    </View>
+  );
+}
+
+function NavRow({
+  icon,
+  label,
+  trailing,
+  onPress,
+  isLast,
+  hideChevron,
+  iconBackground,
+  iconColor,
+  labelColor,
+}: {
+  icon: IconName;
+  label: string;
+  trailing?: string;
+  onPress: () => void;
+  isLast?: boolean;
+  hideChevron?: boolean;
+  iconBackground?: string;
+  iconColor?: string;
+  labelColor?: string;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      style={({ pressed }) => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        paddingVertical: 14,
+        borderBottomWidth: isLast ? 0 : 1,
+        borderBottomColor: color.lineSoft,
+        opacity: pressed ? 0.7 : 1,
+      })}
+    >
+      <View
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: radius.lg,
+          backgroundColor: iconBackground ?? color.paperWarm,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Ionicons name={icon} size={16} color={iconColor ?? color.ink} />
+      </View>
+      <Text
+        variant="ui/label"
+        style={{ flex: 1, color: labelColor ?? color.ink }}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
+      {trailing ? (
+        <Text variant="ui/tiny" style={{ color: color.inkMute }}>
+          {trailing}
+        </Text>
+      ) : null}
+      {hideChevron ? null : <Ionicons name="chevron-forward" size={14} color={color.inkMute} />}
+    </Pressable>
+  );
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '';
+  const first = parts[0]?.charAt(0) ?? '';
+  const last = parts.length > 1 ? (parts[parts.length - 1]?.charAt(0) ?? '') : '';
+  return (first + last).toUpperCase();
+}
+
+function capitalize(s: string): string {
+  return s.length === 0 ? s : s.charAt(0).toUpperCase() + s.slice(1);
 }

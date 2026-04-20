@@ -15,7 +15,7 @@ import { useCreateInvitation } from '../api';
 
 const schema = z.object({
   email: z.string().trim().email('auth.invalidEmail'),
-  role: z.enum(['TENANT', 'MAINTAINER']),
+  role: z.enum(['tenant', 'maintainer']),
   buildingId: z.string().uuid('invitations.selectBuilding'),
   unitId: z.string().uuid().optional(),
 });
@@ -29,7 +29,7 @@ export function NewInvitationScreen() {
 
   const { control, handleSubmit, watch, setValue } = useForm<FormInput>({
     resolver: zodResolver(schema),
-    defaultValues: { email: '', role: 'TENANT', buildingId: '', unitId: undefined },
+    defaultValues: { email: '', role: 'tenant', buildingId: '', unitId: undefined },
     mode: 'onBlur',
   });
 
@@ -43,8 +43,8 @@ export function NewInvitationScreen() {
     create.mutate(values, { onSuccess: () => navigation.goBack() });
   });
 
-  const rolesAllowed: ('TENANT' | 'MAINTAINER')[] =
-    callerRole === 'maintainer' ? ['TENANT'] : ['TENANT', 'MAINTAINER'];
+  const rolesAllowed: ('tenant' | 'maintainer')[] =
+    callerRole === 'maintainer' ? ['tenant'] : ['tenant', 'maintainer'];
 
   return (
     <Screen>
@@ -145,7 +145,7 @@ export function NewInvitationScreen() {
             )}
           </View>
 
-          {role === 'TENANT' && buildingId ? (
+          {role === 'tenant' && buildingId ? (
             <View style={{ gap: 8 }}>
               <Text variant="ui/label-strong">{t('invitations.unitLabel')}</Text>
               {(unitsQuery.data ?? []).map((u) => (
@@ -168,7 +168,7 @@ export function NewInvitationScreen() {
                   }}
                 >
                   <Text variant="ui/label-strong">
-                    {t('buildings.unitNumber', { number: u.number })}
+                    {t('buildings.unitNumber', { number: u.label })}
                   </Text>
                   {u.tenant ? <Text variant="body/small">{u.tenant.name}</Text> : null}
                 </Pressable>

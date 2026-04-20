@@ -9,7 +9,7 @@ import type { TimelineEvent } from '../types';
 
 export function Timeline({
   events,
-  locale = 'es',
+  locale = 'en',
 }: {
   events: TimelineEvent[];
   locale?: 'es' | 'en';

@@ -12,13 +12,26 @@ export type ExpenseListItem = {
   building?: { id: string; name: string };
   recordedBy?: UserRef;
   receiptUrl?: string | null;
-  linkedRequestId?: string | null;
+  requestId?: string | null;
 };
 
 export type Expense = ExpenseListItem;
 
+export type ExpenseCategoryBreakdown = {
+  category: ExpenseCategory;
+  amount: number;
+  entryCount: number;
+};
+
+/**
+ * Shape returned by GET /expenses/summary. Matches the server exactly.
+ */
 export type ExpenseSummary = {
-  totalExpenses: number;
-  count: number;
-  byCategory: Partial<Record<ExpenseCategory, number>>;
+  totalAmount: number;
+  currency: string;
+  entryCount: number;
+  topCategory: ExpenseCategory | null;
+  byCategory: ExpenseCategoryBreakdown[];
+  from: string;
+  to: string;
 };

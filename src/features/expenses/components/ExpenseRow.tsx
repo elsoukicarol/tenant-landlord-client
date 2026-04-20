@@ -10,7 +10,7 @@ import type { ExpenseListItem } from '../types';
 export function ExpenseRow({
   expense,
   onPress,
-  locale = 'es',
+  locale = 'en',
 }: {
   expense: ExpenseListItem;
   onPress?: () => void;

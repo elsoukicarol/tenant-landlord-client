@@ -13,7 +13,8 @@
     "placeholder": "—",
     "unknownError": "Algo salió mal. Inténtalo de nuevo.",
     "show": "Mostrar",
-    "hide": "Ocultar"
+    "hide": "Ocultar",
+    "clear": "Borrar"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -85,10 +86,17 @@
     "unreadAnnouncements": "Anuncios sin leer"
   },
   "requests": {
-    "title": "Mis solicitudes",
+    "title": "Solicitudes",
     "new": "Nueva solicitud",
+    "filter": "Filtrar",
     "filterAll": "Todas",
+    "filterByBuilding": "Filtrar por edificio",
     "allBuildings": "Todos los edificios",
+    "heroEyebrow": "En {{count}} edificios",
+    "heroEyebrowBuilding": "En {{building}}",
+    "heroCounts": " por aceptar · {{inProgress}} en progreso",
+    "awaitingSignOff": "Esperando firma",
+    "scheduledOn": "Programada · {{date}}",
     "emptyMaintainer": "No hay solicitudes con estos filtros.",
     "status": {
       "OPEN": "Abierta",
@@ -192,7 +200,12 @@
     "title": "Anuncios",
     "new": "Nuevo anuncio",
     "publish": "Publicar",
+    "send": "Enviar anuncio",
     "empty": "Aún no hay anuncios.",
+    "heroPrefix": "Comparte un ",
+    "heroItalic": "aviso",
+    "heroSubtitle": "Llega a los inquilinos en la app y por notificación.",
+    "buildingLabel": "Edificio",
     "titleLabel": "Título",
     "titleTooShort": "El título debe tener al menos 3 caracteres.",
     "messageLabel": "Mensaje",
@@ -200,12 +213,21 @@
     "typeLabel": "Tipo",
     "audienceLabel": "Destinatarios",
     "audienceAll": "Todos los inquilinos",
+    "audienceAllWithCount": "Todos · {{count}}",
     "audienceSpecificUnits": "Unidades específicas",
+    "scheduledFor": "Programar (opcional)",
+    "scheduledPlaceholder": "Enviar ahora",
     "selectBuilding": "Selecciona un edificio.",
     "type": {
       "GENERAL": "General",
       "MAINTENANCE": "Mantenimiento",
-      "URGENT": "Urgente",
+      "RULE_UPDATE": "Nueva regla",
+      "EMERGENCY": "Emergencia"
+    },
+    "typeShort": {
+      "GENERAL": "General",
+      "MAINTENANCE": "Mant.",
+      "RULE_UPDATE": "Regla",
       "EMERGENCY": "Emergencia"
     }
   },
@@ -258,7 +280,7 @@
   },
   "portfolio": {
     "heroPrefix": "Buen día, ",
-    "heroSubtitle": "Resumen de {{period}}.",
+    "heroSubtitle": "Resumen de tu cartera.",
     "expensesPlaceholderNote": "Los gastos mensuales se mostrarán cuando el backend termine de agregarlos.",
     "netIncome": "Utilidad neta",
     "vsLastPeriod": "{{delta}}% vs periodo anterior",
@@ -287,19 +309,49 @@
     "selectBuilding": "Selecciona un edificio.",
     "countsPending": "Pendientes · {{count}}",
     "countsAccepted": "Aceptadas · {{count}}",
+    "heroEyebrow": "Enviadas a inquilinos",
+    "heroCounts": " pendientes · {{accepted}} aceptadas",
+    "filterAll": "Todas",
+    "pendingLine": "Enviada {{sent}} · Expira {{expires}}",
+    "acceptedAgo": "Aceptada {{time}}",
+    "revokedAgo": "Revocada {{time}}",
+    "expiredAgo": "Expirada {{time}} · ¿Reenviar?",
+    "inDays": "en {{count}} días",
+    "inOneDay": "mañana",
+    "today": "hoy",
+    "past": "pronto",
     "status": {
-      "PENDING": "Pendiente",
-      "ACCEPTED": "Aceptada",
-      "REVOKED": "Revocada",
-      "EXPIRED": "Expirada"
+      "pending": "Pendiente",
+      "accepted": "Aceptada",
+      "revoked": "Revocada",
+      "expired": "Expirada"
     }
   },
   "profile": {
     "title": "Perfil",
+    "edit": "Editar perfil",
+    "sectionAccount": "Cuenta",
+    "sectionSecurity": "Seguridad",
+    "sectionHelp": "Ayuda",
+    "personalDetails": "Datos personales",
+    "personalDetailsSubtitle": "Actualiza tu nombre y datos de contacto.",
+    "emailImmutable": "Contacta a soporte para cambiar tu correo.",
     "language": "Idioma",
+    "languageSubtitle": "Afecta todo el texto y las notificaciones.",
     "notifications": "Notificaciones",
-    "pushEnabled": "Recibir notificaciones push",
+    "notificationsSubtitle": "Decide cómo Habitare te contacta.",
+    "allEnabled": "Activas",
+    "muted": "Silenciadas",
+    "pushEnabled": "Notificaciones push",
+    "pushEnabledHint": "Recibe alertas en tiempo real en este dispositivo.",
     "urgentOnly": "Solo urgentes",
-    "emailEnabled": "Recibir por correo"
+    "urgentOnlyHint": "Solo notificar solicitudes urgentes.",
+    "emailEnabled": "Notificaciones por correo",
+    "emailEnabledHint": "Recibe resúmenes y novedades por correo.",
+    "passwordSignIn": "Contraseña y acceso",
+    "supportFaqs": "Soporte y preguntas",
+    "signOutConfirmBody": "Necesitarás iniciar sesión de nuevo para usar Habitare.",
+    "comingSoonTitle": "Próximamente",
+    "comingSoonBody": "Forma parte del próximo lanzamiento de Habitare."
   }
 }

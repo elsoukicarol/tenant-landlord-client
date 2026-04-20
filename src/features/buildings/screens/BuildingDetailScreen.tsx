@@ -16,7 +16,7 @@ export function BuildingDetailScreen() {
   const route = useRoute<DetailRoute>();
   const { id } = route.params;
   const user = useAuthStore(selectUser);
-  const locale = user?.language ?? 'es';
+  const locale = user?.language ?? 'en';
 
   const building = useBuilding(id);
   const units = useBuildingUnits(id);
@@ -87,30 +87,30 @@ export function BuildingDetailScreen() {
                   }}
                 >
                   <Text variant="ui/label-strong">
-                    {t('buildings.unitNumber', { number: u.number })}
+                    {t('buildings.unitNumber', { number: u.label })}
                   </Text>
                   <View
                     style={{
                       paddingHorizontal: 8,
                       paddingVertical: 2,
                       borderRadius: radius.pill,
-                      backgroundColor: u.status === 'OCCUPIED' ? color.okSoft : color.lineSoft,
+                      backgroundColor: u.status === 'occupied' ? color.okSoft : color.lineSoft,
                     }}
                   >
                     <Text
                       variant="ui/tiny"
                       style={{
-                        color: u.status === 'OCCUPIED' ? color.ok : color.inkMute,
+                        color: u.status === 'occupied' ? color.ok : color.inkMute,
                         textTransform: 'uppercase',
                       }}
                     >
-                      {u.status === 'OCCUPIED' ? t('buildings.occupied') : t('buildings.vacant')}
+                      {u.status === 'occupied' ? t('buildings.occupied') : t('buildings.vacant')}
                     </Text>
                   </View>
                 </View>
                 {u.tenant ? <Text variant="body/small">{u.tenant.name}</Text> : null}
-                {u.monthlyRent !== undefined ? (
-                  <Text variant="ui/caption">{formatCurrency(u.monthlyRent, locale)} / mo</Text>
+                {u.rentAmount != null ? (
+                  <Text variant="ui/caption">{formatCurrency(u.rentAmount, locale)} / mo</Text>
                 ) : null}
               </Card>
             ))

@@ -13,7 +13,8 @@
     "placeholder": "—",
     "unknownError": "Something went wrong. Please try again.",
     "show": "Show",
-    "hide": "Hide"
+    "hide": "Hide",
+    "clear": "Clear"
   },
   "auth": {
     "signIn": "Sign in",
@@ -85,10 +86,17 @@
     "unreadAnnouncements": "Unread announcements"
   },
   "requests": {
-    "title": "My requests",
+    "title": "Requests",
     "new": "New request",
+    "filter": "Filter",
     "filterAll": "All",
+    "filterByBuilding": "Filter by building",
     "allBuildings": "All buildings",
+    "heroEyebrow": "Across {{count}} buildings",
+    "heroEyebrowBuilding": "In {{building}}",
+    "heroCounts": " need ack · {{inProgress}} in progress",
+    "awaitingSignOff": "Awaiting sign-off",
+    "scheduledOn": "Scheduled · {{date}}",
     "emptyMaintainer": "No requests match these filters.",
     "status": {
       "OPEN": "Open",
@@ -192,20 +200,34 @@
     "title": "Announcements",
     "new": "New announcement",
     "publish": "Publish",
+    "send": "Send announcement",
     "empty": "No announcements yet.",
+    "heroPrefix": "Broadcast a ",
+    "heroItalic": "notice",
+    "heroSubtitle": "Reaches tenants in-app and by push.",
+    "buildingLabel": "Building",
     "titleLabel": "Title",
     "titleTooShort": "Title must be at least 3 characters.",
     "messageLabel": "Message",
     "messageTooShort": "Message must be at least 10 characters.",
     "typeLabel": "Type",
-    "audienceLabel": "Audience",
+    "audienceLabel": "Target audience",
     "audienceAll": "All tenants",
+    "audienceAllWithCount": "All tenants · {{count}}",
     "audienceSpecificUnits": "Specific units",
+    "scheduledFor": "Scheduled for (optional)",
+    "scheduledPlaceholder": "Send now",
     "selectBuilding": "Select a building.",
     "type": {
       "GENERAL": "General",
       "MAINTENANCE": "Maintenance",
-      "URGENT": "Urgent",
+      "RULE_UPDATE": "Rule update",
+      "EMERGENCY": "Emergency"
+    },
+    "typeShort": {
+      "GENERAL": "General",
+      "MAINTENANCE": "Maint.",
+      "RULE_UPDATE": "Rule",
       "EMERGENCY": "Emergency"
     }
   },
@@ -258,7 +280,7 @@
   },
   "portfolio": {
     "heroPrefix": "Good morning, ",
-    "heroSubtitle": "{{period}} overview.",
+    "heroSubtitle": "Portfolio overview.",
     "expensesPlaceholderNote": "Monthly expenses will appear here once the backend finishes aggregating them.",
     "netIncome": "Net income",
     "vsLastPeriod": "{{delta}}% vs. last period",
@@ -287,19 +309,49 @@
     "selectBuilding": "Select a building.",
     "countsPending": "Pending · {{count}}",
     "countsAccepted": "Accepted · {{count}}",
+    "heroEyebrow": "Sent to tenants",
+    "heroCounts": " pending · {{accepted}} accepted",
+    "filterAll": "All",
+    "pendingLine": "Sent {{sent}} · Expires {{expires}}",
+    "acceptedAgo": "Accepted {{time}}",
+    "revokedAgo": "Revoked {{time}}",
+    "expiredAgo": "Expired {{time}} · Resend?",
+    "inDays": "in {{count}} days",
+    "inOneDay": "tomorrow",
+    "today": "today",
+    "past": "soon",
     "status": {
-      "PENDING": "Pending",
-      "ACCEPTED": "Accepted",
-      "REVOKED": "Revoked",
-      "EXPIRED": "Expired"
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "revoked": "Revoked",
+      "expired": "Expired"
     }
   },
   "profile": {
     "title": "Profile",
+    "edit": "Edit profile",
+    "sectionAccount": "Account",
+    "sectionSecurity": "Security",
+    "sectionHelp": "Help",
+    "personalDetails": "Personal details",
+    "personalDetailsSubtitle": "Update your name and contact info.",
+    "emailImmutable": "Contact support to change your email.",
     "language": "Language",
+    "languageSubtitle": "Affects all app text and notifications.",
     "notifications": "Notifications",
+    "notificationsSubtitle": "Control how Habitare reaches you.",
+    "allEnabled": "All on",
+    "muted": "Muted",
     "pushEnabled": "Push notifications",
+    "pushEnabledHint": "Get notified in real time on this device.",
     "urgentOnly": "Urgent only",
-    "emailEnabled": "Email notifications"
+    "urgentOnlyHint": "Only notify me about urgent requests.",
+    "emailEnabled": "Email notifications",
+    "emailEnabledHint": "Receive email summaries and updates.",
+    "passwordSignIn": "Password & sign-in",
+    "supportFaqs": "Support & FAQs",
+    "signOutConfirmBody": "You'll need to sign in again to use Habitare.",
+    "comingSoonTitle": "Coming soon",
+    "comingSoonBody": "This is part of the next Habitare release."
   }
 }

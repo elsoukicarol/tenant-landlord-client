@@ -4,7 +4,7 @@ import { MIN_TAP_TARGET, color, radius, typography } from '@/theme';
 
 import { Text } from './Text';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type Variant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger';
 type Size = 'md' | 'lg';
 
 export type ButtonProps = Omit<PressableProps, 'children'> & {
@@ -19,6 +19,7 @@ export type ButtonProps = Omit<PressableProps, 'children'> & {
 
 const variantBg: Record<Variant, string> = {
   primary: color.ink,
+  accent: color.accent,
   secondary: color.paper,
   ghost: 'transparent',
   danger: color.danger,
@@ -26,6 +27,7 @@ const variantBg: Record<Variant, string> = {
 
 const variantBorder: Record<Variant, string> = {
   primary: color.ink,
+  accent: color.accent,
   secondary: color.line,
   ghost: 'transparent',
   danger: color.danger,
@@ -33,6 +35,7 @@ const variantBorder: Record<Variant, string> = {
 
 const variantText: Record<Variant, string> = {
   primary: color.paper,
+  accent: color.paper,
   secondary: color.ink,
   ghost: color.ink,
   danger: color.paper,

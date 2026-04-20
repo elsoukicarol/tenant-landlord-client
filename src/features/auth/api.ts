@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/api/client';
+import { setLanguage } from '@/lib/i18n';
 
 import type {
   AcceptInvitationInput,
@@ -10,6 +11,12 @@ import type {
   UpdateProfileInput,
 } from './schemas';
 import { type AuthUser, useAuthStore } from './store';
+
+function syncLocale(user: AuthUser | null | undefined): void {
+  if (user?.language === 'es' || user?.language === 'en') {
+    setLanguage(user.language);
+  }
+}
 
 type LoginResponse = { token: string; user: AuthUser };
 type InvitationPreview = {
@@ -31,6 +38,7 @@ export function useLogin() {
     },
     onSuccess: async ({ token, user }) => {
       await useAuthStore.getState().setSession(token, user);
+      syncLocale(user);
     },
   });
 }
@@ -42,6 +50,7 @@ export function useMe(enabled = true) {
     queryFn: async () => {
       const res = await api.get<AuthUser>('/auth/me');
       useAuthStore.getState().setUser(res.data);
+      syncLocale(res.data);
       return res.data;
     },
     staleTime: 60_000,

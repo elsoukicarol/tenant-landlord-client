@@ -9,21 +9,21 @@ import type { ExpenseSummary } from '../types';
 
 export function CategoryBreakdown({
   summary,
-  locale = 'es',
+  locale = 'en',
 }: {
   summary: ExpenseSummary;
   locale?: 'es' | 'en';
 }) {
-  const entries = Object.entries(summary.byCategory).sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0));
-  const max = Math.max(...entries.map(([, v]) => v ?? 0), 1);
+  const entries = [...summary.byCategory].sort((a, b) => b.amount - a.amount);
+  const max = Math.max(...entries.map((e) => e.amount), 1);
 
   if (entries.length === 0) return null;
 
   return (
     <View style={{ gap: 10 }}>
       <Text variant="eyebrow">{t('expenses.byCategory')}</Text>
-      {entries.map(([cat, amount]) => (
-        <View key={cat} style={{ gap: 4 }}>
+      {entries.map((entry) => (
+        <View key={entry.category} style={{ gap: 4 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -31,8 +31,8 @@ export function CategoryBreakdown({
               alignItems: 'center',
             }}
           >
-            <Text variant="ui/label">{t(`requests.category.${cat}`)}</Text>
-            <Text variant="ui/label-strong">{formatCurrency(amount ?? 0, locale)}</Text>
+            <Text variant="ui/label">{t(`requests.category.${entry.category}`)}</Text>
+            <Text variant="ui/label-strong">{formatCurrency(entry.amount, locale)}</Text>
           </View>
           <View
             style={{
@@ -44,7 +44,7 @@ export function CategoryBreakdown({
           >
             <View
               style={{
-                width: `${((amount ?? 0) / max) * 100}%`,
+                width: `${(entry.amount / max) * 100}%`,
                 height: '100%',
                 backgroundColor: color.accent,
               }}

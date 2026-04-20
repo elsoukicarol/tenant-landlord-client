@@ -11,6 +11,9 @@ import { ExpensesListScreen } from '@/features/expenses/screens/ExpensesListScre
 import { InvitationsScreen } from '@/features/invitations/screens/InvitationsScreen';
 import { NewInvitationScreen } from '@/features/invitations/screens/NewInvitationScreen';
 import { NotificationsScreen } from '@/features/notifications/screens/NotificationsScreen';
+import { LanguagePickerScreen } from '@/features/profile/screens/LanguagePickerScreen';
+import { NotificationsSettingsScreen } from '@/features/profile/screens/NotificationsSettingsScreen';
+import { PersonalDetailsScreen } from '@/features/profile/screens/PersonalDetailsScreen';
 import { ProfileScreen } from '@/features/profile/screens/ProfileScreen';
 import { MaintainerHomeScreen } from '@/features/requests/screens/MaintainerHomeScreen';
 import { MaintainerRequestsScreen } from '@/features/requests/screens/MaintainerRequestsScreen';
@@ -19,13 +22,12 @@ import { ResolveRequestScreen } from '@/features/requests/screens/ResolveRequest
 import { t } from '@/lib/i18n';
 import { color } from '@/theme';
 
+import { tabIcon } from './tabIcons';
 import type {
-  MaintainerAnnouncementsStackParamList,
   MaintainerBuildingsStackParamList,
   MaintainerExpensesStackParamList,
   MaintainerHomeStackParamList,
   MaintainerInvitationsStackParamList,
-  MaintainerNotificationsStackParamList,
   MaintainerProfileStackParamList,
   MaintainerRequestsStackParamList,
   MaintainerTabParamList,
@@ -37,9 +39,7 @@ const Home = createNativeStackNavigator<MaintainerHomeStackParamList>();
 const Requests = createNativeStackNavigator<MaintainerRequestsStackParamList>();
 const Buildings = createNativeStackNavigator<MaintainerBuildingsStackParamList>();
 const Expenses = createNativeStackNavigator<MaintainerExpensesStackParamList>();
-const Announcements = createNativeStackNavigator<MaintainerAnnouncementsStackParamList>();
 const Invitations = createNativeStackNavigator<MaintainerInvitationsStackParamList>();
-const Notifications = createNativeStackNavigator<MaintainerNotificationsStackParamList>();
 const Profile = createNativeStackNavigator<MaintainerProfileStackParamList>();
 
 const stackOptions = {
@@ -65,6 +65,26 @@ function HomeStack() {
         name="MaintainerResolveRequest"
         component={ResolveRequestScreen}
         options={{ presentation: 'modal', title: '' }}
+      />
+      <Home.Screen
+        name="MaintainerAnnouncementsList"
+        component={MaintainerAnnouncementsScreen}
+        options={{ title: '' }}
+      />
+      <Home.Screen
+        name="MaintainerAnnouncementDetail"
+        component={AnnouncementDetailScreen}
+        options={{ title: '' }}
+      />
+      <Home.Screen
+        name="MaintainerCreateAnnouncement"
+        component={CreateAnnouncementScreen}
+        options={{ presentation: 'modal', headerShown: false }}
+      />
+      <Home.Screen
+        name="MaintainerNotificationsList"
+        component={NotificationsScreen}
+        options={{ title: '' }}
       />
     </Home.Navigator>
   );
@@ -126,28 +146,6 @@ function ExpensesStack() {
   );
 }
 
-function AnnouncementsStack() {
-  return (
-    <Announcements.Navigator screenOptions={stackOptions}>
-      <Announcements.Screen
-        name="MaintainerAnnouncementsList"
-        component={MaintainerAnnouncementsScreen}
-        options={{ headerShown: false }}
-      />
-      <Announcements.Screen
-        name="MaintainerAnnouncementDetail"
-        component={AnnouncementDetailScreen}
-        options={{ title: '' }}
-      />
-      <Announcements.Screen
-        name="MaintainerCreateAnnouncement"
-        component={CreateAnnouncementScreen}
-        options={{ presentation: 'modal', title: '' }}
-      />
-    </Announcements.Navigator>
-  );
-}
-
 function InvitationsStack() {
   return (
     <Invitations.Navigator screenOptions={stackOptions}>
@@ -165,18 +163,6 @@ function InvitationsStack() {
   );
 }
 
-function NotificationsStack() {
-  return (
-    <Notifications.Navigator screenOptions={stackOptions}>
-      <Notifications.Screen
-        name="MaintainerNotificationsList"
-        component={NotificationsScreen}
-        options={{ headerShown: false }}
-      />
-    </Notifications.Navigator>
-  );
-}
-
 function ProfileStack() {
   return (
     <Profile.Navigator screenOptions={stackOptions}>
@@ -184,6 +170,21 @@ function ProfileStack() {
         name="MaintainerProfileIndex"
         component={ProfileScreen}
         options={{ headerShown: false }}
+      />
+      <Profile.Screen
+        name="ProfilePersonalDetails"
+        component={PersonalDetailsScreen}
+        options={{ title: '' }}
+      />
+      <Profile.Screen
+        name="ProfileNotifications"
+        component={NotificationsSettingsScreen}
+        options={{ title: '' }}
+      />
+      <Profile.Screen
+        name="ProfileLanguage"
+        component={LanguagePickerScreen}
+        options={{ title: '' }}
       />
     </Profile.Navigator>
   );
@@ -199,41 +200,35 @@ export function MaintainerTabs() {
         tabBarStyle: { backgroundColor: color.paper, borderTopColor: color.line },
       }}
     >
-      <Tab.Screen name="MaintainerHome" component={HomeStack} options={{ title: t('nav.home') }} />
+      <Tab.Screen
+        name="MaintainerHome"
+        component={HomeStack}
+        options={{ title: t('nav.home'), tabBarIcon: tabIcon('home-outline') }}
+      />
       <Tab.Screen
         name="MaintainerRequests"
         component={RequestsStack}
-        options={{ title: t('nav.requests') }}
+        options={{ title: t('nav.requests'), tabBarIcon: tabIcon('construct-outline') }}
       />
       <Tab.Screen
         name="MaintainerBuildings"
         component={BuildingsStack}
-        options={{ title: t('nav.buildings') }}
+        options={{ title: t('nav.buildings'), tabBarIcon: tabIcon('business-outline') }}
       />
       <Tab.Screen
         name="MaintainerExpenses"
         component={ExpensesStack}
-        options={{ title: t('nav.expenses') }}
-      />
-      <Tab.Screen
-        name="MaintainerAnnouncements"
-        component={AnnouncementsStack}
-        options={{ title: t('nav.announcements') }}
+        options={{ title: t('nav.expenses'), tabBarIcon: tabIcon('receipt-outline') }}
       />
       <Tab.Screen
         name="MaintainerInvitations"
         component={InvitationsStack}
-        options={{ title: t('nav.invitations') }}
-      />
-      <Tab.Screen
-        name="MaintainerNotifications"
-        component={NotificationsStack}
-        options={{ title: t('nav.notifications') }}
+        options={{ title: t('nav.invitations'), tabBarIcon: tabIcon('mail-outline') }}
       />
       <Tab.Screen
         name="MaintainerProfile"
         component={ProfileStack}
-        options={{ title: t('nav.profile') }}
+        options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person-outline') }}
       />
     </Tab.Navigator>
   );

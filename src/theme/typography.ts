@@ -123,12 +123,11 @@ export const typography = {
     color: color.inkSoft,
   },
   'ui/pill': {
-    fontFamily: INTER_SEMIBOLD,
-    fontSize: 11,
+    fontFamily: INTER_MEDIUM,
+    fontSize: 10,
     lineHeight: 12,
     color: color.ink,
-    letterSpacing: 0.3,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
   },
   'ui/tab': {
     fontFamily: INTER_MEDIUM,
